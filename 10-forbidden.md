@@ -34,4 +34,4 @@ Use merge in both directions — parent is shared.
 
 ---
 
-[← Previous](./09-2-rebase-danger.md) | [📋 Index](./README.md) | [Next →](./12-branch-protection)
+[← Previous](./09-2-rebase-danger.md) | [📋 Index](./README.md) | [Next →](./11-cicd-pipeline.md)
