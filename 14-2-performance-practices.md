@@ -93,6 +93,75 @@ git commit -m "refactor(utils): extract validation helpers"
 
 ---
 
+## Advanced: Git Worktree
+
+**Work on multiple branches simultaneously without stashing or cloning:**
+
+<div style="text-align: center;">
+<img src="./git-worktree.png" width="700">
+</div>
+
+---
+
+### How It Works
+
+<div style="text-align: center;">
+<img src="./Worktrees-01-1024x460.png" width="700">
+</div>
+
+**The mechanism:**
+- **One repository, multiple directories** — All worktrees share a single `.git` folder
+- **Each worktree = separate folder** — Independent working directory with its own checked-out branch
+- **No duplication** — Commits, branches, and history exist only once (in the shared `.git`)
+- **Constraint** — A branch can only be checked out in ONE worktree at a time
+
+```
+REPOSITORY (.git/)       ← Single source of truth
+       │
+       ├── ../main/      ← Main worktree (main branch)
+       │
+       ├── ../feature1/  ← Linked worktree (feature-1 branch)
+       │
+       └── ../feature2/  ← Linked worktree (feature-2 branch)
+```
+
+**On disk, it looks like this:**
+
+```
+my-project/              ← Main worktree (has .git/)
+├── .git/                ← Shared by ALL worktrees
+├── src/
+└── ...
+
+my-project-feature1/     ← Linked worktree (points to .git/)
+├── .git                 ← File (not folder!) pointing to ../my-project/.git
+├── src/
+└── ...
+```
+
+---
+
+### When to Use
+
+- Reviewing a PR while your feature branch has uncommitted work
+- Running tests on one branch while coding on another
+- Comparing behavior between branches side-by-side
+
+```bash
+# Create a worktree for another branch
+git worktree add ../review-branch feature/JIRA-456
+
+# List all worktrees
+git worktree list
+
+# Clean up when done
+git worktree remove ../review-branch
+```
+
+> **Why not just clone again?** Worktrees share the `.git` directory, so they're instant to create and use minimal disk space.
+
+---
+
 ## CI/CD Performance Tips
 
 ```yaml
